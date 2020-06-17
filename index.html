@@ -1,0 +1,89 @@
+<html>
+<head>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+<link rel="stylesheet" href="Leaflet.EditInOSM.css" />
+ <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="Permalink.js"></script>
+<script src="osmtogeojson.js"></script>
+<!--<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+ <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">-->
+ <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	
+ <style>
+   html, body, #mapid {
+      height:100%;
+      width:100%;
+      padding:0px;
+      margin:0px;
+   } 
+
+#mySpinner {
+	position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+	}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+ 
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-top-color: #000;
+  animation: spinner .6s linear infinite;
+  z-index:502;
+}
+#load {
+	color: blue;
+	text-decoration: underline;
+}
+#load:hover {
+  cursor: pointer;
+}
+/*.leaflet-popup-content { width:500px; height:500px;}*/
+.leaflet-popup-content p {margin: 2px;}
+ </style>
+</head>
+<div id="mapid"></div>
+<div style="top:10px;right:10px;position:absolute;cursor:inherit; z-index:500; text-align: right;">
+    <h3>Huts and shelters</h3>
+    <a href="about.html">About</a>
+    <a id="load">Load POIs</a>
+  </div>
+<div id="mySpinner"></div>
+<script src="Leaflet.EditInOSM.js"></script>
+<script>
+// init map 
+var map = L.map('mapid', {center: L.latLng(58.6, 15), zoom: 7});
+L.tileLayer('https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=159ae8cd2d004e66b1c3c952fa98bec5', {
+    attribution: 'Map data &copy; <a target="_blank" href="https://www.openstreetmap.org/">OpenStreetgap</a> contributors, Vector tiles by <a href="https://www.thunderforest.com/maps/outdoors/" target="_blank">Thunderforest</a>',
+    maxZoom: 18,
+}).addTo(map);
+
+map.addControl(new L.Control.Permalink({text: 'Permalink', useAnchor: false}));
+map.addControl(new L.Control.EditInOSM({
+            position: 'topleft',
+            widgetOptions: {helpText: 'Open this map extent in a map editor to provide more accurate data to OpenStreetMap'}
+	}));
+L.control.scale({metric: true, imperial: true}).addTo(map);
+</script>
+<script src="sheltermap.js"></script>
+</html>
