@@ -15,6 +15,10 @@ You should have received a copy of the GNU General Public License
 along with sheltermap.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    alert("This map is not suitable for use on mobile devices. Please download OsmAnd instead. It enables adding notes, searching for shelters and editing the map directly.");
+}
+
 var markers = new L.FeatureGroup();
 
 $('#load').click(function(){init2()});
@@ -107,18 +111,29 @@ function getData() {
 		// loop through all tags and convert them to html
 		// inspired by https://stackoverflow.com/questions/33838315/how-to-loop-over-geojson-properties-to-display-in-leaflet-markers	
 		var tags = [];
+		// avoid showing description twice
+		delete feature.properties.description;
+		// delete links clutter
+		delete feature.properties.mapillary;
+		delete feature.properties.wikimedia_commons;
+		delete feature.properties.image;
+		// loop through
 		for (var prop in feature.properties) {
-		    if (prop == 'description'){}
 		    if (prop == 'id')
         		tags.push('<b><a target="_blank" href="https://openstreetmap.org/'+feature.properties[prop]+'">View on openstreetmap.org</a></b>');
-		    if (prop == 'wikidata')
+		    else if (prop == 'wikidata')
         		tags.push('<b><a target="_blank" href="https://wikidata.org/wiki/'+feature.properties[prop]+'">View on Wikidata.org</a></b>');
 		    else if (prop == 'website')
         		tags.push('<b><a href="'+feature.properties[prop]+'">View the website of the feature</a></b>');
 		    else
         		tags.push('<b>' + prop + ":</b> " + feature.properties[prop]);
 		}
-		var popupContent = '<h1>'+feature.properties.name+'</h1>'+
+		// avoid undefined names
+		if (feature.properties.name == undefined)
+		    var name = "";
+		else
+		    var name = feature.properties.name;
+		var popupContent = '<h1>'+name+'</h1>'+
                     '<div>'+desc+'<br />'+images.join("</br>")+'</div>'+
 		    '<h3>Tags</h3>'+
 		    '<div>' + tags.join("<br />") + '</div>';

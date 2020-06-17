@@ -1,3 +1,4 @@
+// source here https://github.com/pangoSE/Leaflet.EditInOSM
 (function (factory) {
     var L;
     if (typeof define === 'function' && define.amd) {
@@ -67,6 +68,22 @@
         },
 
         _Editors = {
+            Note: function (config) {
+                var url = 'https://www.openstreetmap.org/note/new#map=',
+                    displayName = "Add new note",
+                    buildUrl = function (map) {
+                        return this.url + [
+                            map.getZoom(),
+                            map.getCenter().wrap().lat,
+                            map.getCenter().wrap().lng
+                        ].join('/');
+                    };
+                return {
+                    url: (config && config.url) || url,
+                    displayName: (config && config.displayName) || displayName,
+                    buildUrl: (config && config.buildUrl) || buildUrl
+                };
+            },
             Id: function (config) {
                 var url = 'https://www.openstreetmap.org/edit?editor=id#map=',
                     displayName = "iD",
@@ -162,7 +179,7 @@
             position: "topright",
             zoomThreshold: 0,
             widget: "multiButton",
-            editors: ["id", "josm"]
+            editors: ["note", "id", "josm"]
         },
 
         initialize: function (options) {
@@ -199,6 +216,8 @@
                     newEditors.push(new _Editors.Josm());
                 } else if (editorSmallName === "potlatch") {
                     newEditors.push(new _Editors.Potlatch());
+                } else if (editorSmallName === "note") {
+                    newEditors.push(new _Editors.Note());
                 } else {
                     newEditors.push(editor);
                 }
