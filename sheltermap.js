@@ -56,16 +56,18 @@ function getData() {
 	var query =
 	    'https://overpass-api.de/api/interpreter?'+
 	    'data=[out:xml][timeout:25];'+
+	    '('+  // Start union
 	    // Get barbecues
-	    '(nwr["access"!="private"]["amenity"="bbq"]('+overpassQueryBox+');'+
+	    'nw["access"!="private"]["amenity"="bbq"]('+overpassQueryBox+');'+
 	    // Get alpine huts
-	    '(nwr["access"!="private"]["tourism"="alpine_hut"]('+overpassQueryBox+');'+
+	    'nw["access"!="private"]["tourism"="alpine_hut"]('+overpassQueryBox+');'+
 	    // Get wilderness huts
-	    'nwr["access"!="private"]["tourism"="wilderness_hut"]('+overpassQueryBox+');'+
+	    'nw["access"!="private"]["tourism"="wilderness_hut"]('+overpassQueryBox+');'+
 	    // Get shelters <3
-	    'nwr["access"!="private"]["amenity"="shelter"]'+
+	    'nw["access"!="private"]["amenity"="shelter"]'+
 	    // but not these kinds of shelters which are not suitable for hikers that want to sleep
-	    '["shelter_type"!="public_transport"]["public_transport"!~".*"]["leisure"!="bird_hide"]('+overpassQueryBox+'););'+
+	    '["shelter_type"!="public_transport"]["public_transport"!~".*"]["leisure"!="bird_hide"]('+overpassQueryBox+');'+
+	    ');'+  // End union
 	    'out%20center;';
 	console.log(query);
 	return query;
