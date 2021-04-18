@@ -56,6 +56,8 @@ function getData() {
 	var query =
 	    'https://overpass-api.de/api/interpreter?'+
 	    'data=[out:xml][timeout:25];'+
+	    // Get barbecues
+	    '(nwr["access"!="private"]["amenity"="bbq"]('+overpassQueryBox+');'+
 	    // Get alpine huts
 	    '(nwr["access"!="private"]["tourism"="alpine_hut"]('+overpassQueryBox+');'+
 	    // Get wilderness huts
