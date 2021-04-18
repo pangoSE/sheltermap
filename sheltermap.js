@@ -16,7 +16,7 @@ along with sheltermap.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    alert("This map is not suitable for use on mobile devices. Please download OsmAnd instead. It enables adding notes, searching for shelters and editing the map directly.");
+    alert("This map is not suitable for use on mobile devices. Please download OsmAnd instead. It enables adding notes, searching for shelters, seeing pictures linked from OSM objects and editing the map directly.");
 }
 
 var markers = new L.FeatureGroup();
